@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
+    'coaches.apps.CoachesConfig',
 ]
 
 MIDDLEWARE = [
