@@ -5,10 +5,9 @@ from .managers import UserManager
 
 class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
+    username = models.CharField(max_length=50, unique=True)
     full_name = models.CharField(max_length=50)
-    date_of_birth = models.DateField(blank=True, null=True)
-    height = models.FloatField(blank=True, null=True)
-    weight = models.IntegerField(blank=True, null=True)
+    phone_number = models.CharField(max_length=11, unique=True)
     image = models.ImageField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -18,7 +17,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['full_name']
+    REQUIRED_FIELDS = ['full_name', 'username', 'phone_number']
 
     def __str__(self):
         return f"{self.full_name} - {self.email}"
@@ -33,3 +32,10 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
     
+
+class RegularUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='regular_profile')
+    date_of_birth = models.DateField(blank=True, null=True)
+    height = models.FloatField(blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True)
+
