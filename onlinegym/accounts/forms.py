@@ -44,3 +44,15 @@ class UserRegisterationForm(forms.Form):
     email = forms.EmailField()
     full_name = forms.CharField(max_length=50)
     password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = User.objects.get(email=email).exists()
+        if user:
+            raise ValidationError('this email has already exists')
+        return user
+
+
+class UserLoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserRegisterationForm
+from .forms import UserRegisterationForm, UserLoginForm
 from .models import User
 from django.contrib import messages
+from django.contrib.auth import login
 
 
 class UserRegisterView(View):
@@ -22,3 +23,15 @@ class UserRegisterView(View):
             messages.success(request, 'registered successfully', 'success')
             return redirect('home:home')
         return render(request, 'accounts/register.html', {'form': form})
+
+
+class UserLoginView(View):
+    form_class = UserLoginForm
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, 'accounts/login.html', {'form': form})
+
+    def post(self, request):
+        pass
+
