@@ -8,4 +8,4 @@ class Coach(models.Model):
     certifications = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.full_name} - Coach"
+        return f"{self.user.full_name} - {self.specialty} - Coach"

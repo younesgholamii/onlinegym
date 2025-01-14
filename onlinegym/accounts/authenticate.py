@@ -1,12 +1,11 @@
 from django.contrib.auth.backends import ModelBackend
+from django.db.models import Q
 from .models import User
 
 class EmailOrUsernameBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
-            user = User.objects.get(
-                User.Q(email=username) | User.Q(username=username)
-            )
+            user = User.objects.get(Q(email=username) | Q(username=username))
         except User.DoesNotExist:
             return None
 
