@@ -3,10 +3,11 @@ from django.views import View
 from .forms import UserRegisterationForm, UserLoginForm
 from .models import User, RegularUser
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class UserRegisterView(View):
+class UserRegisterView(LoginRequiredMixin, View):
     form_class = UserRegisterationForm
 
     def get(self, request):
@@ -34,5 +35,23 @@ class UserLoginView(View):
         return render(request, 'accounts/login.html', {'form': form})
 
     def post(self, request):
-        pass
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user:
+                login(request, user)
+                messages.success(request, 'Logged in successfully!', 'success')
+                return redirect('home:home')
+            else:
+                messages.error(request, 'Invalid email or password', 'danger')
+        return render(request, 'accounts/login.html', {'form': form})
+
+
+class UserLogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, 'Logged out successfully!', 'success')
+        return redirect('home:home')
 
