@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4>User Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            {% if user.image %}
+                                <img src="{{ user.image.url }}" alt="Profile Picture" class="img-fluid rounded-circle shadow" style="max-width: 150px;">
+                            {% else %}
+                                <img src="https://via.placeholder.com/150" alt="Default Profile" class="img-fluid rounded-circle shadow" style="max-width: 150px;">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Full Name</th>
+                                    <td>{{ user.full_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{{ user.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Username</th>
+                                    <td>{{ user.username }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone Number</th>
+                                    <td>{{ user.phone_number }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Account Type</th>
+                                    <td>
+                                        {% if user.is_coach %}
+                                            Coach
+                                        {% else %}
+                                            Regular User
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Account Created</th>
+                                    <td>{{ user.created|date:"Y-m-d H:i" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'home:home' %}" class="btn btn-primary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
