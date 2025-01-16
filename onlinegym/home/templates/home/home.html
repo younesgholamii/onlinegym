@@ -1,5 +1,56 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <h3>hello {{ request.user.full_name }}</h3>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Coaches List</h2>
+    <div class="row">
+        {% for coach in coaches %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    {% if coach.image %}
+                        <img src="{{ coach.image.url }}" class="card-img-top" alt="Profile Picture">
+                    {% else %}
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Default Profile Picture">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ coach.full_name }}</h5>
+                        <p class="card-text"><strong>Specialty:</strong> {{ coach.specialty }}</p>
+                        <p class="card-text"><strong>Email:</strong> {{ coach.email }}</p>
+                        <a href="#" class="btn btn-primary">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">No coaches registered yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+</style>
 {% endblock %}

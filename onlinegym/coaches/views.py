@@ -17,7 +17,7 @@ class CoachRegisterView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = User.objects.create(email=cd['email'], username=cd['username'], full_name=cd['full_name'], phone_number=cd['phone_number'])
+            user = User.objects.create(email=cd['email'], username=cd['username'], full_name=cd['full_name'], phone_number=cd['phone_number'], is_coach=True)
             user.set_password(cd['password'])
             user.save()
             Coach.objects.create(user=user, specialty=cd['specialty'], certifications=cd['certifications'])
