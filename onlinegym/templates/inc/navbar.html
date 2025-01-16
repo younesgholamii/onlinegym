@@ -3,6 +3,9 @@
       <div class="navbar-nav">
         <a class="nav-link active" href="{% url 'home:home' %}">Home</a>
         {% if request.user.is_authenticated %}
+          {% if request.user.is_coach %}
+            <a class="nav-link active" href="{% url 'coaches:coach_post' %}">Post</a>
+          {% endif %}
             <a class="nav-link active" href="{% url 'accounts:user_profile' %}">Profile</a>
             <a class="nav-link active" href="{% url 'accounts:user_logout' %}">Logout</a>
         {% else %}

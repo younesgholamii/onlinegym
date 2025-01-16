@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import CoachRegisterForm
+from .forms import CoachRegisterForm, CoachPostsForm
 from accounts.models import User
-from .models import Coach
+from .models import Coach, CoachPosts
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class CoachRegisterView(View):
@@ -26,3 +27,19 @@ class CoachRegisterView(View):
         return render(request, 'accounts/register.html', {'form': form})
 
 
+class CoachPostsView(LoginRequiredMixin, View):
+    form_class = CoachPostsForm
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, 'coaches/posts.html', {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            post = CoachPosts.objects.create(coach=request.user, title=cd['title'], content=cd['content'])
+            if cd['image']:
+                post.image = cd['image']
+            messages.success(request, 'post created successfully', 'success')
+        return render(request, 'coaches/posts.html', {'form': form})

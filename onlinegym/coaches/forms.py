@@ -32,3 +32,17 @@ class CoachRegisterForm(forms.Form):
         if user:
             raise ValidationError('this username has already exists')
         return username
+    
+
+
+class CoachPostsForm(forms.Form):
+    image = forms.ImageField(required=False, label="Image")
+    title = forms.CharField(
+        max_length=255,
+        label="Title",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title'}),
+    )
+    content = forms.CharField(
+        label="Content",
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Enter content'}),
+    )

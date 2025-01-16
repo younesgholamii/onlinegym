@@ -2,6 +2,7 @@
 
 {% block body %}
 <div class="container mt-5">
+    <h2 class="text-center mb-4">{{ request.user.full_name }}</h2>
     <h2 class="text-center mb-4">Coaches List</h2>
     <div class="row">
         {% for coach in coaches %}

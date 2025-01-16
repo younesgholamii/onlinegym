@@ -9,3 +9,20 @@ class Coach(models.Model):
 
     def __str__(self):
         return f"{self.user.full_name} - {self.specialty} - Coach"
+
+
+class CoachPosts(models.Model):
+    coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    title = models.CharField(max_length=255, verbose_name="Title")
+    content = models.TextField(verbose_name="Content")
+    image = models.ImageField(upload_to='posts/', null=True, blank=True, verbose_name="Post Image")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Post"
+        verbose_name_plural = "Posts"
+
+    def __str__(self):
+        return self.title
