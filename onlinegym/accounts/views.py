@@ -7,7 +7,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class UserRegisterView(LoginRequiredMixin, View):
+class UserRegisterView(View):
     form_class = UserRegisterationForm
 
     def get(self, request):

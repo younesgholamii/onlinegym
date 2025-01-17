@@ -1,9 +1,31 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <form action="" method="post" novalidate>
+    <form action="" method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Post">
+        <input type="submit" value="Post" class="btn">
     </form>
 {% endblock %}
+
+<style>
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    input[type="submit"] {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover {
+        background-color: #218838;
+    }
+</style>

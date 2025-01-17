@@ -35,11 +35,11 @@ class CoachPostsView(LoginRequiredMixin, View):
         return render(request, 'coaches/posts.html', {'form': form})
     
     def post(self, request):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             cd = form.cleaned_data
-            post = CoachPosts.objects.create(coach=request.user, title=cd['title'], content=cd['content'])
-            if cd['image']:
-                post.image = cd['image']
+            post = CoachPosts.objects.create(coach=request.user, title=cd['title'], content=cd['content'], image=cd['image'])
+
             messages.success(request, 'post created successfully', 'success')
+            return redirect('home:home')
         return render(request, 'coaches/posts.html', {'form': form})

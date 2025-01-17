@@ -1,5 +1,29 @@
 {% if messages %}
-    {% for msg in messages %}
-        <p class="alert alert-{{ msg.tags }}">{{ msg }}</p>
-    {% endfor %}
+    <div class="message-container">
+        {% for msg in messages %}
+            <p class="alert alert-{{ msg.tags }}">{{ msg }}</p>
+        {% endfor %}
+    </div>
 {% endif %}
+<style>
+    .message-container {
+        margin-top: 20px;
+    }
+    .alert {
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .alert-success {
+        background-color: #28a745;
+        color: white;
+    }
+    .alert-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+    .alert-info {
+        background-color: #17a2b8;
+        color: white;
+    }
+</style>
