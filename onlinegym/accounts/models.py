@@ -8,7 +8,7 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=50, unique=True, null=True)
     full_name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=11, unique=True, null=True)
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(upload_to='users/', blank=True, null=True, verbose_name="Users Image")
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_coach = models.BooleanField(default=False)

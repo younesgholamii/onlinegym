@@ -44,6 +44,7 @@ class UserRegisterationForm(forms.Form):
     phone_number = forms.CharField(max_length=11)
     full_name = forms.CharField(max_length=50)
     username = forms.CharField(max_length=50)
+    image = forms.ImageField(required=False, label="Image")
     password = forms.CharField(widget=forms.PasswordInput)
 
     def clean_email(self):

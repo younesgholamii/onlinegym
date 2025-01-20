@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import UserRegisterationForm, UserLoginForm
 from .models import User, RegularUser
@@ -18,7 +18,7 @@ class UserRegisterView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = User.objects.create(email=cd['email'], username=cd['username'], full_name=cd['full_name'], phone_number=cd['phone_number'])
+            user = User.objects.create(email=cd['email'], username=cd['username'], full_name=cd['full_name'], phone_number=cd['phone_number'], image=cd['image'])
             user.set_password(cd['password'])
             user.save()
             RegularUser.objects.create(user=user)
@@ -57,7 +57,7 @@ class UserLogoutView(LoginRequiredMixin, View):
 
 
 class UserProfileView(LoginRequiredMixin, View):
-    def get(self, request):
-        user = request.user
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
         return render(request, 'accounts/profile.html', {'user': user})
 
