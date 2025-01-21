@@ -1,5 +1,6 @@
 from django.db import models
-from accounts.models import User
+from accounts.models import User, RegularUser
+
 
 
 class Coach(models.Model):
@@ -26,3 +27,18 @@ class CoachPosts(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Appointment(models.Model):
+    user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
+    coach = models.ForeignKey(Coach, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=11)
+    age = models.SmallIntegerField()
+    weight = models.SmallIntegerField()
+    height = models.SmallIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.first_name}"
