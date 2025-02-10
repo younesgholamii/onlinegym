@@ -29,6 +29,11 @@ class CoachPosts(models.Model):
         return self.title
     
 class Appointment(models.Model):
+    plan_choices = [
+        ('D', 'Diet plan'),
+        ('E', 'Exercise plan')
+    ]
+
     user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
     coach = models.ForeignKey(Coach, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
@@ -37,6 +42,7 @@ class Appointment(models.Model):
     age = models.SmallIntegerField()
     weight = models.SmallIntegerField()
     height = models.SmallIntegerField()
+    plan = models.CharField(max_length=50, choices=plan_choices, default='D')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
