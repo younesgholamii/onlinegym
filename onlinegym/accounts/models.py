@@ -7,6 +7,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=50, unique=True, null=True)
     full_name = models.CharField(max_length=50)
+    age = models.IntegerField(blank=True, null=True)
     phone_number = models.CharField(max_length=11, unique=True, null=True)
     image = models.ImageField(upload_to='users/', blank=True, null=True, verbose_name="Users Image")
     is_active = models.BooleanField(default=True)

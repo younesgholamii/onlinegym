@@ -1,7 +1,7 @@
 from django import forms
 from accounts.models import User
 from django.core.exceptions import ValidationError
-
+from .models import Appointment
 
 class CoachRegisterForm(forms.Form):
     email = forms.EmailField()
@@ -46,3 +46,10 @@ class CoachPostsForm(forms.Form):
         label="Content",
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Enter content'}),
     )
+
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['first_name', 'last_name', 'phone_number', 'age', 'weight', 'height', 'plan']
+    
