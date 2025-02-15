@@ -43,6 +43,7 @@ class Appointment(models.Model):
     weight = models.SmallIntegerField()
     height = models.SmallIntegerField()
     plan = models.CharField(max_length=50, choices=plan_choices, default='D')
+    descriptions = models.TextField(default=None, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

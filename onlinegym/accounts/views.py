@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from coaches.forms import AppointmentForm
-from coaches.models import Appointment, User
+from coaches.models import Appointment, User, Coach
 
 
 class UserRegisterView(View):
@@ -61,16 +61,19 @@ class UserLogoutView(LoginRequiredMixin, View):
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
-        form = AppointmentForm
-        return render(request, 'accounts/profile.html', {'user': user, 'form': form})
+        coach = get_object_or_404(Coach, user=user)
+        form = AppointmentForm()
+        return render(request, 'accounts/profile.html', {'user': user, 'coach': coach, 'form': form})
     
     def post(self, request, user_id):
         form = AppointmentForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
             cd = form.cleaned_data
+            user = get_object_or_404(User, id=user_id)
+            coach = get_object_or_404(Coach, user=user)
             appointment = Appointment.objects.create(
-                user = request.user,
-                coach = get_object_or_404(User, id=user_id),
+                user = get_object_or_404(RegularUser, user=request.user),
+                coach = coach,
                 first_name = cd['first_name'],
                 last_name = cd['last_name'],
                 phone_number = cd['phone_number'],
@@ -78,8 +81,8 @@ class UserProfileView(LoginRequiredMixin, View):
                 weight = cd['weight'],
                 height = cd['height'],
                 plan = cd['plan'],
+                descriptions = cd.get('descriptions', ''),
             )
             appointment.save()
-            messages.success(request, 'appointment sent successfully', 'success')
-            return redirect('accounts:user_profile')
-
+            messages.success(request, 'Appointment sent successfully', 'success')
+            return redirect('accounts:user_profile', user_id=user_id)

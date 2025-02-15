@@ -51,5 +51,5 @@ class CoachPostsForm(forms.Form):
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['first_name', 'last_name', 'phone_number', 'age', 'weight', 'height', 'plan']
+        fields = ['first_name', 'last_name', 'phone_number', 'age', 'weight', 'height', 'plan', 'descriptions']
     
