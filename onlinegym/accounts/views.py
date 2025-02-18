@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from coaches.forms import AppointmentForm
-from coaches.models import Appointment, User, Coach
+from coaches.models import Appointment, User, Coach, RegularUser
 
 
 class UserRegisterView(View):
@@ -60,10 +60,9 @@ class UserLogoutView(LoginRequiredMixin, View):
 
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
-        user = get_object_or_404(User, id=user_id)
-        coach = get_object_or_404(Coach, user=user)
+        user = get_object_or_404(User, id=user_id)            
         form = AppointmentForm()
-        return render(request, 'accounts/profile.html', {'user': user, 'coach': coach, 'form': form})
+        return render(request, 'accounts/profile.html', {'user': user, 'form': form})
     
     def post(self, request, user_id):
         form = AppointmentForm(request.POST)

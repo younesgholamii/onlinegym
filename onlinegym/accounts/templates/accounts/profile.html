@@ -36,14 +36,30 @@
                                     <td>{{ user.phone_number }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Account Type</th>
-                                    <td>
-                                        {% if user.is_coach %}
-                                            Coach
-                                        {% else %}
-                                            Regular User
-                                        {% endif %}
-                                    </td>
+                                    {% if user.is_coach %}
+                                        <tr>
+                                            <th>Account Type</th>
+                                            <td>Coach</td>
+                                        </tr>
+                                        <tr>
+                                            <th>specialty</th>
+                                            <td>{{user.coach_profile.specialty}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>certifications</th>
+                                            <td>{{user.coach_profile.certifications}}</td>
+                                        </tr>
+                                        
+                                    {% else %}
+                                        <tr>
+                                            <th>Account Type</th>
+                                            <td>Regular user</td>
+                                        </tr>
+                                        <tr>
+                                            <th>date of birth</th>
+                                            <td>{{user.regular_profile.date_of_birth}}</td>
+                                        </tr>                                       
+                                    {% endif %}
                                 </tr>
                                 <tr>
                                     <th>Account Created</th>
