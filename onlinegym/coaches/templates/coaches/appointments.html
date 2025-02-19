@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% for appointment in appointments %}
+        {{appointment.coach.user.username}} <br>
+        {{appointment.plan}} <br>
+        {{appointment.updated}} <br>
+        
+        
+        
+        <hr>
+    {% endfor %}
+{% endblock %}

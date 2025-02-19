@@ -30,8 +30,8 @@ class CoachPosts(models.Model):
     
 class Appointment(models.Model):
     plan_choices = [
-        ('D', 'Diet plan'),
-        ('E', 'Exercise plan')
+        ('Diet', 'Diet plan'),
+        ('Exercise', 'Exercise plan')
     ]
 
     user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
@@ -48,4 +48,4 @@ class Appointment(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.first_name}"
+        return f"{self.user.user.username} -- {self.coach.user.username}"

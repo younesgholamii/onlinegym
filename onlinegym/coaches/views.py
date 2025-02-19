@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import CoachRegisterForm, CoachPostsForm
 from accounts.models import User
-from .models import Coach, CoachPosts
+from .models import Coach, CoachPosts, Appointment
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -43,3 +43,11 @@ class CoachPostsView(LoginRequiredMixin, View):
             messages.success(request, 'post created successfully', 'success')
             return redirect('home:home')
         return render(request, 'coaches/posts.html', {'form': form})
+
+
+class UserAppointmentsView(LoginRequiredMixin, View):
+    def get(self, request):
+        appointments = Appointment.objects.filter(user__user__id=request.user.id).order_by('-created')
+        return render(request, 'coaches/appointments.html', {'appointments': appointments})
+
+        
