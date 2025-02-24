@@ -4,9 +4,11 @@
         {% if request.user.is_authenticated %}
             {% if request.user.is_coach %}
                 <a href="{% url 'coaches:coach_post' %}">Post</a>
+                <a href="{% url 'coaches:coach_requests' request.user.id %}">Requests</a>
+            {% else %}
+                <a href="{% url 'coaches:user_appointments' %}">My appointments</a>
             {% endif %}
                 <a href="{% url 'accounts:user_profile' request.user.id %}">Profile</a>
-                <a href="{% url 'coaches:user_appointments' %}">My appointments</a>
                 <a href="{% url 'accounts:user_logout' %}">Logout</a>
         {% else %}
             <a href="{% url 'accounts:user_register' %}">User Register</a>

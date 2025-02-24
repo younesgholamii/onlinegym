@@ -50,4 +50,10 @@ class UserAppointmentsView(LoginRequiredMixin, View):
         appointments = Appointment.objects.filter(user__user__id=request.user.id).order_by('-created')
         return render(request, 'coaches/appointments.html', {'appointments': appointments})
 
+
+class CoachesRequestView(LoginRequiredMixin, View):
+    def get(self, request, coach_id):
+        user = User.objects.get(id=coach_id)
+        requests = Appointment.objects.filter(coach__user__id=user.id)
+        return render(request, 'coaches/requests.html', {'requests': requests})
         

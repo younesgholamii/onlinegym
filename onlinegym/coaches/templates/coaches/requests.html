@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% for coach_request in requests %}
+        <div>
+            <div>
+                {{ coach_request.user.user.username }}
+            </div>
+            <div>
+                {{ coach_request.plan}}
+            </div>
+            <div>
+                {{ coach_request.age }}
+            </div>
+            <div>
+                {{ coach_request.height }}
+            </div>
+            <div>
+                {{ coach_request.weight }}
+            </div>
+            <div>
+                {{ coach_request.descriptions }}
+            </div>
+        </div><hr>
+    {% endfor %}
+{% endblock %}
