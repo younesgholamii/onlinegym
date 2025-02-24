@@ -4,7 +4,7 @@ from .forms import UserRegisterationForm, UserLoginForm
 from .models import User, RegularUser
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from coaches.forms import AppointmentForm
 from coaches.models import Appointment, User, Coach, RegularUser
 
@@ -31,6 +31,12 @@ class UserRegisterView(View):
 
 class UserLoginView(View):
     form_class = UserLoginForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            messages.error(request, "you logged in before", 'error')
+            return redirect("home:home")
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         form = self.form_class()

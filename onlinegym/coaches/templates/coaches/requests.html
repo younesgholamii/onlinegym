@@ -4,7 +4,7 @@
     {% for coach_request in requests %}
         <div>
             <div>
-                {{ coach_request.user.user.username }}
+                <a href="{% url 'accounts:user_profile' coach_request.user.user.id %}">{{ coach_request.user.user.username }}</a>
             </div>
             <div>
                 {{ coach_request.plan}}
