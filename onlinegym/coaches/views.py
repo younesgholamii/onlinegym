@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .forms import CoachRegisterForm, CoachPostsForm
+from .forms import CoachRegisterForm, CoachPostsForm, ExercisesForm
 from accounts.models import User
 from .models import Coach, CoachPosts, Appointment, Exercises
 from django.contrib import messages
@@ -62,4 +62,17 @@ class CoachesExercisesView(LoginRequiredMixin, View):
     def get(self, request, coach_id):
         user = get_object_or_404(User, id=coach_id)
         exercises = Exercises.objects.filter(coach__user__id=user.id)
-        return render(request, 'coaches/exercises.html', {'exercises': exercises})
+        form = ExercisesForm()
+        return render(request, 'coaches/exercises.html', {'exercises': exercises, 'form': form})
+    
+    def post(self, request, coach_id):
+        form = ExercisesForm(request.POST)
+        if form.is_valid():
+            user = get_object_or_404(User, id=coach_id)
+            coach = get_object_or_404(Coach, user__id=user.id)
+            cd = form.cleaned_data
+            exercise = Exercises.objects.create(coach=coach, name=cd['name'], category=cd['category'], sets=cd['sets'], reps=cd['reps'])
+            exercise.save()
+            messages.success(request, 'exercise added successfully', 'success')
+            return redirect('coaches:coach_exercises', user.id)
+        return render(request, 'coaches/exercises.html', {'form': form})
