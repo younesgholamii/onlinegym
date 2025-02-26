@@ -49,3 +49,17 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"{self.user.user.username} -- {self.coach.user.username}"
+    
+
+class Exercises(models.Model):
+    coach = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='coachs')
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=100, null=True, blank=True)
+    sets = models.SmallIntegerField()
+    reps = models.SmallIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+    

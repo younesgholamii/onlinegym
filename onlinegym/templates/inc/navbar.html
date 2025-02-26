@@ -5,6 +5,7 @@
             {% if request.user.is_coach %}
                 <a href="{% url 'coaches:coach_post' %}">Post</a>
                 <a href="{% url 'coaches:coach_requests' request.user.id %}">Requests</a>
+                <a href="{% url 'coaches:coach_exercises' request.user.id %}">Exercises</a>
             {% else %}
                 <a href="{% url 'coaches:user_appointments' %}">My appointments</a>
             {% endif %}

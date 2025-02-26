@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% for exercise in exercises %}
+        <h3>{{ exercise.name }}</h3>
+    {% endfor %}
+{% endblock %}
