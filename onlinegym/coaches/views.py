@@ -76,3 +76,8 @@ class CoachesExercisesView(LoginRequiredMixin, View):
             messages.success(request, 'exercise added successfully', 'success')
             return redirect('coaches:coach_exercises', user.id)
         return render(request, 'coaches/exercises.html', {'form': form})
+
+
+class CoachesAnswerView(LoginRequiredMixin, View):
+    def get(self, request, coach_id, user_id):
+        return render(request, 'coaches/answer.html')

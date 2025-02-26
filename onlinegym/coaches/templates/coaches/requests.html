@@ -21,7 +21,7 @@
             <div>
                 {{ coach_request.descriptions }}
             </div>
-            <a href=""><button>Answer</button></a>
+            <a href="{% url 'coaches:coach_answer' request.user.id coach_request.user.user.id %}"><button>Answer</button></a>
         </div><hr>
     {% endfor %}
 {% endblock %}
