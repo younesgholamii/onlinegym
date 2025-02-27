@@ -1,5 +1,30 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <p>hello</p>
+    <div>
+        <div>
+            <a href="{% url 'accounts:user_profile' appointment.user.user.id %}">{{ appointment.user.user.username }}</a>
+        </div>
+        <div>
+            {{ appointment.plan}}
+        </div>
+        <div>
+            {{ appointment.age }}
+        </div>
+        <div>
+            {{ appointment.height }}
+        </div>
+        <div>
+            {{ appointment.weight }}
+        </div>
+        <div>
+            {{ appointment.descriptions }}
+        </div>
+    </div><hr>
+    {% for exercise in exercises %}
+        <div>
+            <a href="{% url 'coaches:coach_add_exercise' appointment.user.user.id exercise.id %}">+</a> ...<a href="">-</a> ........ {{ exercise.name }} -- {{ exercise.sets }} x {{ exercise.reps }} 
+        </div>
+    {% endfor %}
+
 {% endblock %}

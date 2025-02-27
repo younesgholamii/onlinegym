@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import CoachRegisterForm, CoachPostsForm, ExercisesForm
 from accounts.models import User
-from .models import Coach, CoachPosts, Appointment, Exercises
+from .models import Coach, CoachPosts, Appointment, Exercises, AppointmentAnswer
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -79,5 +79,15 @@ class CoachesExercisesView(LoginRequiredMixin, View):
 
 
 class CoachesAnswerView(LoginRequiredMixin, View):
-    def get(self, request, coach_id, user_id):
-        return render(request, 'coaches/answer.html')
+    def get(self, request, appointment_id):
+        exercises = Exercises.objects.filter(coach__user__id=request.user.id)
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        return render(request, 'coaches/answer.html', {'appointment': appointment, 'exercises': exercises})
+
+
+class AddExerciseView(LoginRequiredMixin, View):
+    def get(self, request, user_id, exercise_id):
+        user = get_object_or_404(User, id=user_id)
+        exercise = get_object_or_404(Exercises, id=exercise_id)
+        AppointmentAnswer.objects.create(user=user, name=exercise.name)
+        return redirect('home:home')
