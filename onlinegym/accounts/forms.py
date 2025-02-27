@@ -1,13 +1,26 @@
 from django import forms
-from django.contrib import admin
-from django.contrib.auth.models import Group
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from .models import User
 
+class UniqueFieldsValidationMixin:
+    def clean_email(self):
+        return self.validate_unique_field('email', 'this email has already exist.')
 
-class UserCreationForm(forms.ModelForm):
+    def clean_phone_number(self):
+        return self.validate_unique_field('phone_number', 'this phone number has already exist.')
+
+    def clean_username(self):
+        return self.validate_unique_field('username', 'this username has already exist.')
+
+    def validate_unique_field(self, field_name, error_message):
+        field_value = self.cleaned_data.get(field_name)
+        if User.objects.filter(**{field_name: field_value}).exists():
+            raise ValidationError(error_message)
+        return field_value
+
+
+class UserCreationForm(forms.ModelForm, UniqueFieldsValidationMixin):
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput)
 
@@ -15,12 +28,11 @@ class UserCreationForm(forms.ModelForm):
         model = User
         fields = ['email', 'full_name']
 
-    def clean_password(self):
+    def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
-
         if password1 and password2 and password1 != password2:
-            raise ValidationError("passwords don't match")
+            raise ValidationError("passwords are not the same")
         return password2
     
     def save(self, commit=True):
@@ -39,34 +51,13 @@ class UserChangeForm(forms.ModelForm):
         fields = ['email', 'username', 'full_name', 'phone_number', 'password', 'image', 'is_active', 'is_admin']
         
 
-class UserRegisterationForm(forms.Form):
+class UserRegisterationForm(forms.Form, UniqueFieldsValidationMixin):
     email = forms.EmailField()
     phone_number = forms.CharField(max_length=11)
     full_name = forms.CharField(max_length=50)
     username = forms.CharField(max_length=50)
     image = forms.ImageField(required=False, label="Image")
     password = forms.CharField(widget=forms.PasswordInput)
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        user = User.objects.filter(email=email).exists()
-        if user:
-            raise ValidationError('this email has already exists')
-        return email
-    
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data['phone_number']
-        user = User.objects.filter(phone_number=phone_number).exists()
-        if user:
-            raise ValidationError('this phone_number has already exists')
-        return phone_number
-    
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        user = User.objects.filter(username=username).exists()
-        if user:
-            raise ValidationError('this username has already exists')
-        return username
 
 
 class UserLoginForm(forms.Form):
