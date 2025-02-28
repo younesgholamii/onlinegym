@@ -1,80 +1,36 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block body %}
-<div class="container">
-    <h2 class="text-center mb-4">{{ request.user.full_name }}</h2>
-    <h2 class="text-center mb-4">Coaches Post</h2>
-    <div class="post-container">
+{% block title %}Home - OnlineGym{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'home/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <h2>Welcome, {{ request.user.full_name }}</h2>
+    <h3>Coaches Posts</h3>
+    <div class="posts-grid">
         {% for post in posts %}
             <div class="post-card">
                 <div class="card">
                     {% if post.image %}
-                        <img src="{{ post.image.url }}" class="card-img-top" alt="Post Image">
+                        <img src="{{ post.image.url }}" class="card-img" alt="Post Image" style="max-width: 150px;">
                     {% else %}
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Default Post Image">
+                        <img src="https://via.placeholder.com/300x200" class="card-img" alt="Default Post Image">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text">{{ post.content }}</p>
-                        <p class="card-text"><small>{{ post.created_at }}</small></p>
-                        <a href="{% url 'accounts:user_profile' post.coach.id %}" class="btn">View Profile</a>
+                        <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+                        <p class="card-date">{{ post.created_at|date:"F j, Y" }}</p>
+                        <a href="{% url 'accounts:user_profile' post.coach.id %}" class="btn-view-profile">View Profile</a>
                     </div>
                 </div>
             </div>
         {% empty %}
-            <p class="text-center">No posts yet.</p>
+            <p class="no-posts">No posts yet.</p>
         {% endfor %}
     </div>
 </div>
-
-<style>
-    .post-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px; /* فاصله بین پست‌ها */
-        overflow-x: auto; /* اسکرول افقی */
-        padding: 20px;
-    }
-    
-    .post-card {
-        width: 250px; /* عرض ثابت برای هر پست */
-        border-radius: 10px;
-        overflow: hidden;
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    }
-    
-    .post-card:hover {
-        transform: scale(1.05); /* بزرگ شدن کم */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* سایه‌ای ملایم */
-    }
-    
-    .card {
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .card-img-top {
-        height: 200px;
-        object-fit: cover; /* تصویر به صورت مربعی باشد */
-        border-bottom: 2px solid #ddd;
-    }
-
-    .card-body {
-        padding: 15px;
-    }
-    
-    .btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .btn:hover {
-        background-color: #0056b3;
-    }
-</style>
 {% endblock %}
