@@ -1,27 +1,17 @@
 /* register.css */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
 
 .register-container {
-    background-color: #ffffff;
+    background-color: #afc4e1;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
     text-align: center;
+    width: 60%;
 }
 
 .register-container h2 {
     margin-bottom: 1.5rem;
-    color: #333;
+    color: black;
 }
 
 .register-form {
@@ -36,7 +26,7 @@ body {
 .register-form label {
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #555;
+    color: #121212;
 }
 
 .register-form input {
@@ -64,7 +54,7 @@ body {
 
 .login-link {
     margin-top: 1rem;
-    color: #666;
+    color: #0d0d0d;
 }
 
 .login-link a {
