@@ -1,27 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block body %}
-    {% for coach_request in requests %}
-        <div>
-            <div>
-                <a href="{% url 'accounts:user_profile' coach_request.user.user.id %}">{{ coach_request.user.user.username }}</a>
-            </div>
-            <div>
-                {{ coach_request.plan}}
-            </div>
-            <div>
-                {{ coach_request.age }}
-            </div>
-            <div>
-                {{ coach_request.height }}
-            </div>
-            <div>
-                {{ coach_request.weight }}
-            </div>
-            <div>
-                {{ coach_request.descriptions }}
-            </div>
-            <a href="{% url 'coaches:coach_answer' coach_request.id %}"><button>Answer</button></a>
-        </div><hr>
-    {% endfor %}
+{% block title %}Coach Requests - OnlineGym{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'coaches/requests.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="requests-container">
+    <h2>Coach Requests</h2>
+    {% if requests %}
+        <div class="requests-list">
+            {% for request in requests %}
+                <div class="request-card">
+                    <p><strong>User:</strong> {{ request.user.user.full_name }}</p>
+                    <p><strong>Plan:</strong> {{ request.plan }}</p>
+                    <p><strong>Date:</strong> {{ request.created|date:"F j, Y" }}</p>
+                    <a href="{% url 'coaches:coach_answer' request.id %}" class="btn-answer">Answer</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-requests">No requests yet.</p>
+    {% endif %}
+</div>
 {% endblock %}

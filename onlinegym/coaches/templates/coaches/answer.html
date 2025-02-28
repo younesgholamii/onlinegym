@@ -1,30 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block body %}
-    <div>
-        <div>
-            <a href="{% url 'accounts:user_profile' appointment.user.user.id %}">{{ appointment.user.user.username }}</a>
-        </div>
-        <div>
-            {{ appointment.plan}}
-        </div>
-        <div>
-            {{ appointment.age }}
-        </div>
-        <div>
-            {{ appointment.height }}
-        </div>
-        <div>
-            {{ appointment.weight }}
-        </div>
-        <div>
-            {{ appointment.descriptions }}
-        </div>
-    </div><hr>
-    {% for exercise in exercises %}
-        <div>
-            <a href="{% url 'coaches:coach_add_exercise' appointment.user.user.id exercise.id %}">+</a> ...<a href="">-</a> ........ {{ exercise.name }} -- {{ exercise.sets }} x {{ exercise.reps }} 
-        </div>
-    {% endfor %}
+{% block title %}Answer Appointment - OnlineGym{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'coaches/answer.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="answer-container">
+    <h2>Answer Appointment</h2>
+    <div class="appointment-details">
+        <p><strong>User:</strong> {{ appointment.user.user.full_name }}</p>
+        <p><strong>Plan:</strong> {{ appointment.plan }}</p>
+        <p><strong>Age:</strong> {{ appointment.age }}</p>
+        <p><strong>Height:</strong> {{ appointment.height }} cm</p>
+        <p><strong>Weight:</strong> {{ appointment.weight }} kg</p>
+        <p><strong>Description:</strong> {{ appointment.descriptions }}</p>
+    </div>
+    <div class="exercises-list">
+        {% for exercise in exercises %}
+            <div class="exercise-card">
+                <p><strong>Name:</strong> {{ exercise.name }}</p>
+                <p><strong>Sets:</strong> {{ exercise.sets }}</p>
+                <p><strong>Reps:</strong> {{ exercise.reps }}</p>
+                <a href="{% url 'coaches:coach_add_exercise' appointment.user.user.id exercise.id %}" class="btn-add-exercise">Add Exercise</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

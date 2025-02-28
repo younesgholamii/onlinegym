@@ -1,13 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block body %}
-    {% for appointment in appointments %}
-        {{appointment.coach.user.username}} <br>
-        {{appointment.plan}} <br>
-        {{appointment.updated}} <br>
-        
-        
-        
-        <hr>
-    {% endfor %}
+{% block title %}My Appointments - OnlineGym{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'coaches/appointments.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="appointments-container">
+    <h2>My Appointments</h2>
+    {% if appointments %}
+        <div class="appointments-list">
+            {% for appointment in appointments %}
+                <div class="appointment-card">
+                    <p><strong>Coach:</strong> {{ appointment.coach.user.full_name }}</p>
+                    <p><strong>Plan:</strong> {{ appointment.plan }}</p>
+                    <p><strong>Date:</strong> {{ appointment.created|date:"F j, Y" }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-appointments">No appointments yet.</p>
+    {% endif %}
+</div>
 {% endblock %}

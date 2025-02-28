@@ -1,12 +1,33 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block body %}
-    {% for exercise in exercises %}
-        <h3>{{ exercise.name }}</h3>
-    {% endfor %}
-    <form action="" method="post">
+{% block title %}Exercises - OnlineGym{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'coaches/exercises.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="exercises-container">
+    <h2>Exercises</h2>
+    <form method="post" class="exercise-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Add">
+        <button type="submit" class="btn-add-exercise">Add Exercise</button>
     </form>
+    {% if exercises %}
+        <div class="exercises-list">
+            {% for exercise in exercises %}
+                <div class="exercise-card">
+                    <p><strong>Name:</strong> {{ exercise.name }}</p>
+                    <p><strong>Category:</strong> {{ exercise.category }}</p>
+                    <p><strong>Sets:</strong> {{ exercise.sets }}</p>
+                    <p><strong>Reps:</strong> {{ exercise.reps }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-exercises">No exercises yet.</p>
+    {% endif %}
+</div>
 {% endblock %}
