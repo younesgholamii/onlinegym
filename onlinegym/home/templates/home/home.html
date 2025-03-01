@@ -21,10 +21,11 @@
                         <img src="https://via.placeholder.com/300x200" class="card-img" alt="Default Post Image">
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ post.title }}</h5>
+                        <h5 class="card-title">{{ post.coach.user.full_name }}</h5><hr>
+                        <h3 class="card-text">{{ post.title }}</h3>
                         <p class="card-text">{{ post.content|truncatechars:100 }}</p>
                         <p class="card-date">{{ post.created_at|date:"F j, Y" }}</p>
-                        <a href="{% url 'accounts:user_profile' post.coach.id %}" class="btn-view-profile">View Profile</a>
+                        <a href="{% url 'accounts:user_profile' post.coach.user.id %}" class="btn-view-profile">View Profile</a>
                     </div>
                 </div>
             </div>

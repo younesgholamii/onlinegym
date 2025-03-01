@@ -58,3 +58,11 @@ class ExercisesForm(forms.ModelForm):
     class Meta:
         model = Exercises
         fields = ['name', 'category', 'sets', 'reps']
+
+
+class AppointmentAnswerForm(forms.Form):
+    exercises = forms.ModelMultipleChoiceField(
+        queryset=Exercises.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label='Select exercises'
+    )

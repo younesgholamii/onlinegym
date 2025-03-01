@@ -13,7 +13,7 @@ class Coach(models.Model):
 
 
 class CoachPosts(models.Model):
-    coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    coach = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=255, verbose_name="Title")
     content = models.TextField(verbose_name="Content")
     image = models.ImageField(upload_to='posts/', null=True, blank=True, verbose_name="Post Image")
@@ -64,9 +64,24 @@ class Exercises(models.Model):
         return self.name
 
 
-class AppointmentAnswer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+class WorkoutPlan(models.Model):
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name='workout_plan')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.appointment.user.user.full_name
+
+
+
+class AppointmentAnswer(models.Model):
+    workout_plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE, related_name='plan', null=True, blank=True)
+    name = models.CharField(max_length=255)
+    sets = models.SmallIntegerField(null=True, blank=True)
+    reps = models.SmallIntegerField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.name} --- {self.sets}x{self.reps}'
 
