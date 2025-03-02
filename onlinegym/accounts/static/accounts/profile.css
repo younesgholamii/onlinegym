@@ -57,3 +57,14 @@
 .btn-back:hover {
     background-color: #0056b3;
 }
+
+.form-container {
+    background-color: #b8b6a7;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}

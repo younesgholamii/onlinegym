@@ -90,7 +90,7 @@ class CoachesAnswerView(LoginRequiredMixin, View):
         appointment = get_object_or_404(Appointment, id=appointment_id)
         form = AppointmentAnswerForm(request.POST)
         if form.is_valid():
-            workout_plan, created = WorkoutPlan.objects.get_or_create(appointment=appointment)
+            workout_plan = WorkoutPlan.objects.get_or_create(appointment=appointment)
             workout_plan.save()
             selected_exercises = form.cleaned_data['exercises']
             for exercise in selected_exercises:
