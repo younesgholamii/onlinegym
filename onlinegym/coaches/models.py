@@ -36,6 +36,7 @@ class Appointment(models.Model):
 
     user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
     coach = models.ForeignKey(Coach, on_delete=models.CASCADE)
+    workoutplan = models.OneToOneField("WorkoutPlan", on_delete=models.CASCADE, related_name='workout_plan', null=True, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=11)
@@ -65,23 +66,22 @@ class Exercises(models.Model):
 
 
 class WorkoutPlan(models.Model):
-    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name='workout_plan')
+    user = models.ForeignKey(RegularUser, on_delete=models.CASCADE, related_name='user_workout_plan')
+    name = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.appointment.user.user.full_name
+        return self.name
 
 
 
 class AppointmentAnswer(models.Model):
-    workout_plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE, related_name='plan', null=True, blank=True)
-    name = models.CharField(max_length=255)
-    sets = models.SmallIntegerField(null=True, blank=True)
-    reps = models.SmallIntegerField(null=True, blank=True)
+    workout_plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE, related_name='plan')
+    exercise = models.ForeignKey(Exercises, on_delete=models.CASCADE, related_name='exercise')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.name} --- {self.sets}x{self.reps}'
+        return f'{self.workout_plan} -- {self.exercise.name}'
 

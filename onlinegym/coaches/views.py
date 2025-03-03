@@ -87,47 +87,23 @@ class CoachesAnswerView(LoginRequiredMixin, View):
         return render(request, 'coaches/answer.html', {'appointment': appointment, 'exercises': exercises, 'form': form})
 
     def post(self, request, appointment_id):
-        appointment = get_object_or_404(Appointment, id=appointment_id)
         form = AppointmentAnswerForm(request.POST)
         if form.is_valid():
-            workout_plan = WorkoutPlan.objects.get_or_create(appointment=appointment)
+            appointment = get_object_or_404(Appointment, id=appointment_id)
+            workout_plan, create = WorkoutPlan.objects.get_or_create(user=appointment.user)
+            if not appointment.workoutplan:
+                appointment.workoutplan = workout_plan
+                appointment.save()
+            cd = form.cleaned_data
+            workout_plan.name = cd['name']
             workout_plan.save()
-            selected_exercises = form.cleaned_data['exercises']
-            for exercise in selected_exercises:
+            for exercise in cd['exercises']:
                 AppointmentAnswer.objects.create(
                     workout_plan=workout_plan,
-                    name=exercise.name,
-                    sets=exercise.sets,
-                    reps=exercise.reps
+                    exercise=exercise
                 ).save()
             return redirect('coaches:coach_requests', request.user.id)
         return render(request, 'coaches/answer.html', {
         'appointment': appointment,
         'form': form,
         })
-
-# class AddExerciseView(LoginRequiredMixin, View):
-
-#     def get(self, request, appointment_id):
-#         form = AppointmentAnswerForm()
-#         return render(request, 'coaches/answer.html', {'form': form})
-
-#     def post(self, request, appointment_id):
-#         appointment = get_object_or_404(Appointment, id=appointment_id)
-#         form = AppointmentAnswerForm(request.POST)
-#         if form.is_valid():
-#             workout_plan = WorkoutPlan.objects.create(appointment=appointment)
-
-#             selected_exercises = form.cleaned_data['exercises']
-#             for exercise in selected_exercises:
-#                 Exercises.objects.create(
-#                     workout_plan=workout_plan,
-#                     name=exercise.name,
-#                     sets=exercise.sets,
-#                     reps=exercise.reps
-#                 )
-#             return redirect('coaches:coach_requests', request.user.id)
-#         return render(request, 'coaches/answer.html', {
-#         'appointment': appointment,
-#         'form': form,
-#         })

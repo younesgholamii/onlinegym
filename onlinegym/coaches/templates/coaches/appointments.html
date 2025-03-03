@@ -18,6 +18,12 @@
                     <p><strong>Plan:</strong> {{ appointment.plan }}</p>
                     <p><strong>Date:</strong> {{ appointment.created|date:"F j, Y" }}</p>
                 </div>
+                <div>
+                    {% if appointment.workoutplan %}
+                        <p>aa</p>
+                        {{ appointment.workoutplan }}
+                    {% endif %}
+                </div>
             {% endfor %}
         </div>
     {% else %}

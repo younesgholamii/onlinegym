@@ -61,6 +61,7 @@ class ExercisesForm(forms.ModelForm):
 
 
 class AppointmentAnswerForm(forms.Form):
+    name = forms.CharField(max_length=255)
     exercises = forms.ModelMultipleChoiceField(
         queryset=Exercises.objects.all(),
         widget=forms.CheckboxSelectMultiple,
