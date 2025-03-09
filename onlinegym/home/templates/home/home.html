@@ -9,6 +9,11 @@
 
 {% block content %}
 <div class="home-container">
+    <form method="get" action="{% url 'home:home' %}" class="search-form">
+        <input type="text" name="coach_username" placeholder="Search">
+        <button type="submit" class="btn-search">Search</button>
+    </form>
+
     <h2>Welcome, {{ request.user.full_name }}</h2>
     <h3>Coaches Posts</h3>
     <div class="posts-grid">
