@@ -55,8 +55,8 @@ class UserAppointmentsView(LoginRequiredMixin, View):
 class CoachesRequestView(LoginRequiredMixin, View):
     def get(self, request, coach_id):
         user = get_object_or_404(User, id=coach_id)
-        requests = Appointment.objects.filter(coach__user__id=user.id)
-        return render(request, 'coaches/requests.html', {'requests': requests})
+        appointments = Appointment.objects.filter(coach__user__id=user.id)
+        return render(request, 'coaches/requests.html', {'appointments': appointments})
         
 
 class CoachesExercisesView(LoginRequiredMixin, View):
@@ -102,6 +102,8 @@ class CoachesAnswerView(LoginRequiredMixin, View):
                     workout_plan=workout_plan,
                     exercise=exercise
                 ).save()
+            appointment.answered = True
+            appointment.save()
             return redirect('coaches:coach_requests', request.user.id)
         return render(request, 'coaches/answer.html', {
         'appointment': appointment,

@@ -25,7 +25,7 @@
                         <h3 class="card-text">{{ post.title }}</h3>
                         <p class="card-text">{{ post.content|truncatechars:100 }}</p>
                         <p class="card-date">{{ post.created_at|date:"F j, Y" }}</p>
-                        <a href="{% url 'accounts:user_profile' post.coach.user.id %}" class="btn-view-profile">View Profile</a>
+                        <a href="{{ post.get_absolute_url }}" class="btn-view-profile">View Profile</a>
                     </div>
                 </div>
             </div>

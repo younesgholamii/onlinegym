@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User, RegularUser
+from django.urls import reverse
 
 
 
@@ -28,6 +29,9 @@ class CoachPosts(models.Model):
     def __str__(self):
         return self.title
     
+    def get_absolute_url(self):
+        return reverse('accounts:user_profile', args=[int(self.coach.user.id)])
+    
 class Appointment(models.Model):
     plan_choices = [
         ('Diet', 'Diet plan'),
@@ -37,6 +41,7 @@ class Appointment(models.Model):
     user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
     coach = models.ForeignKey(Coach, on_delete=models.CASCADE)
     workoutplan = models.OneToOneField("WorkoutPlan", on_delete=models.CASCADE, related_name='workout_plan', null=True, blank=True)
+    answered = models.BooleanField(default=False)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=11)

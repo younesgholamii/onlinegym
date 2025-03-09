@@ -10,5 +10,4 @@ urlpatterns = [
     path('requests/<int:coach_id>/', views.CoachesRequestView.as_view(), name='coach_requests'),
     path('exercises/<int:coach_id>/', views.CoachesExercisesView.as_view(), name='coach_exercises'),
     path('answer/<int:appointment_id>/', views.CoachesAnswerView.as_view(), name='coach_answer'),
-    # path('answer/add/<int:appointment_id>/', views.AddExerciseView.as_view(), name='coach_add_exercise'),
 ]
