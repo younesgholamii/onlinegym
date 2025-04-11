@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - OnlineGym{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+    <a href="{{ post.get_absolute_url }}" style="text-decoration: none;"><h5 style="font-size: large; ">{{ post.coach.user.full_name }}</h5></a>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" class="card-img" alt="Post Image" style="max-width: 450px;">
+    {% else %}
+        <img src="https://via.placeholder.com/300x200" class="card-img" alt="Default Post Image">
+    {% endif %}
+    <h3 class="card-text">{{ post.title }}</h3>
+    <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+    <p class="card-date">{{ post.created_at|date:"F j, Y" }}</p>
+{% endblock %}

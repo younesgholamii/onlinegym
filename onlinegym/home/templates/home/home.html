@@ -19,20 +19,16 @@
     <div class="posts-grid">
         {% for post in posts %}
             <div class="post-card">
-                <div class="card">
+                <a href="{% url 'home:details' post.id %}"><div class="card">
                     {% if post.image %}
-                        <img src="{{ post.image.url }}" class="card-img" alt="Post Image" style="max-width: 150px;">
+                        <img src="{{ post.image.url }}" class="card-img" alt="Post Image" style="max-width: 180px;">
                     {% else %}
                         <img src="https://via.placeholder.com/300x200" class="card-img" alt="Default Post Image">
                     {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ post.coach.user.full_name }}</h5><hr>
-                        <h3 class="card-text">{{ post.title }}</h3>
-                        <p class="card-text">{{ post.content|truncatechars:100 }}</p>
-                        <p class="card-date">{{ post.created_at|date:"F j, Y" }}</p>
-                        <a href="{{ post.get_absolute_url }}" class="btn-view-profile">View Profile</a>
+                    <div class="card-body" style="text-align: center;">
+                        <a href="{{ post.get_absolute_url }}" style="text-decoration: none;"><h5 class="card-title">{{ post.coach.user.full_name }}</h5></a>
                     </div>
-                </div>
+                </div></a>
             </div>
         {% empty %}
             <p class="no-posts">No posts yet.</p>

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from coaches.models import CoachPosts
+from django.shortcuts import get_object_or_404
 
 
 class HomeView(View):
@@ -12,3 +13,9 @@ class HomeView(View):
         else:
             posts = CoachPosts.objects.all()
         return render(request, 'home/home.html', {'posts': posts})
+    
+class DetailsView(View):
+    def get(self, request, post_id):
+        post = get_object_or_404(CoachPosts, id=post_id)
+        return render(request, "home/details.html", {'post': post})
+
