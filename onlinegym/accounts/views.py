@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .forms import UserRegisterationForm, UserLoginForm
+from .forms import UserRegisterationForm, UserLoginForm, UserProfileEditForm
 from .models import User, RegularUser
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -94,5 +94,16 @@ class UserProfileView(LoginRequiredMixin, View):
         
 
 class UserProfileEditView(LoginRequiredMixin, View):
-    def get(self, request, user_id):
-        pass
+    form_class = UserProfileEditForm
+
+    def get(self, request):
+        form = self.form_class(instance=request.user)
+        return render(request, 'accounts/editprofile.html', {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile editted successfully', 'success')
+            return redirect('accounts:user_profile', user_id=request.user.id)
+        return render(request, 'accounts/editprofile.html', {'form': form})

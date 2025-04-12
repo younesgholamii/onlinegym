@@ -45,7 +45,7 @@
 {% endif %}
 <a href="{% url 'home:home' %}" class="btn-back">Back to Home</a>
 {% if request.user == user %}
-    <a href="{% url 'accounts:user_profile_edit' user.id %}" class="btn-back">Edit Profile</a>
+    <a href="{% url 'accounts:user_profile_edit' %}" class="btn-back">Edit Profile</a>
 {% endif %}
 
 {% endblock %}

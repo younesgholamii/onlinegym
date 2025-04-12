@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from .models import User
+from .models import User, RegularUser
 
 class UniqueFieldsValidationMixin:
     def clean_email(self):
@@ -63,3 +63,28 @@ class UserRegisterationForm(forms.Form, UniqueFieldsValidationMixin):
 class UserLoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class UserProfileEditForm(forms.ModelForm):
+    height = forms.FloatField(required=False, label="height")
+    weight = forms.FloatField(required=False, label="weight")
+    
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'full_name', 'phone_number', 'date_of_birth', 'image']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if hasattr(self.instance, 'regular_profile'):
+            self.fields['height'].initial = self.instance.regular_profile.height
+            self.fields['weight'].initial = self.instance.regular_profile.weight
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            regular_user, created = RegularUser.objects.get_or_create(user=user)
+            regular_user.height = self.cleaned_data['height']
+            regular_user.weight = self.cleaned_data['weight']
+            regular_user.save()
+        return user
