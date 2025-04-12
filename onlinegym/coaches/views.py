@@ -91,17 +91,19 @@ class CoachesAnswerView(LoginRequiredMixin, View):
         if form.is_valid():
             appointment = get_object_or_404(Appointment, id=appointment_id)
             workout_plan, create = WorkoutPlan.objects.get_or_create(user=appointment.user)
-            if not appointment.workoutplan:
-                appointment.workoutplan = workout_plan
-                appointment.save()
+            workout_plan = appointment.workoutplan if appointment.workoutplan else WorkoutPlan.objects.create(user=appointment.user)
             cd = form.cleaned_data
             workout_plan.name = cd['name']
             workout_plan.save()
+            AppointmentAnswer.objects.filter(workout_plan=workout_plan).delete()
             for exercise in cd['exercises']:
                 AppointmentAnswer.objects.create(
                     workout_plan=workout_plan,
                     exercise=exercise
-                ).save()
+                )
+        
+        if not appointment.workoutplan:
+            appointment.workoutplan = workout_plan
             appointment.answered = True
             appointment.save()
             return redirect('coaches:coach_requests', request.user.id)
@@ -109,3 +111,10 @@ class CoachesAnswerView(LoginRequiredMixin, View):
         'appointment': appointment,
         'form': form,
         })
+
+
+class AppointmentAnswerView(LoginRequiredMixin, View):
+    def get(self, request, appointment_id):
+        appointment_answere = get_object_or_404(Appointment, id=appointment_id)
+        appointment_answeres = AppointmentAnswer.objects.filter(workout_plan=appointment_answere.workoutplan)
+        return render(request, 'coaches/seeplan.html', {'answeres': appointment_answeres})

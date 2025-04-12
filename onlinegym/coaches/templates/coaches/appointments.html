@@ -20,8 +20,7 @@
                 </div>
                 <div>
                     {% if appointment.workoutplan %}
-                        <p>aa</p>
-                        {{ appointment.workoutplan }}
+                        <a href="{% url 'coaches:appointment_answer' appointment.id %}">answered</a>
                     {% endif %}
                 </div>
             {% endfor %}

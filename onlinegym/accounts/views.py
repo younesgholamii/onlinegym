@@ -91,3 +91,8 @@ class UserProfileView(LoginRequiredMixin, View):
             appointment.save()
             messages.success(request, 'Appointment sent successfully', 'success')
             return redirect('accounts:user_profile', user_id=user_id)
+        
+
+class UserProfileEditView(LoginRequiredMixin, View):
+    def get(self, request, user_id):
+        pass
