@@ -4,28 +4,34 @@
 {% block title %}My Appointments - OnlineGym{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'coaches/appointments.css' %}">
+    <link rel="stylesheet" href="{% static 'coaches/appointments.css' %}?v=1.0">
 {% endblock %}
 
 {% block content %}
 <div class="appointments-container">
-    <h2>My Appointments</h2>
+    <h2 class="appointments-title">My Appointments</h2>
     {% if appointments %}
         <div class="appointments-list">
             {% for appointment in appointments %}
                 <div class="appointment-card">
-                    <p><strong>Coach:</strong> {{ appointment.coach.user.full_name }}</p>
-                    <p><strong>Plan:</strong> {{ appointment.plan }}</p>
-                    <p><strong>Date:</strong> {{ appointment.created|date:"F j, Y" }}</p>
-                    {% if appointment.workoutplan %}
-                        <p><strong>Status:</strong> <a href="{% url 'coaches:appointment_answer' appointment.id %}">answered</a></p>
-                    {% else %}
-                        <p><strong>Status:</strong>pending</p>
-                    {% endif %}
-                    <a href="{% url 'coaches:user_appointments_delete' appointment.id %}" class="btn-delete">Delete</a>
-                    <a href="{% url 'coaches:user_appointments_edit' appointment.id %}" class="btn-edit">Edit</a>
+                    <div class="card-content">
+                        <p class="appointment-detail"><span class="detail-label">Coach:</span> {{ appointment.coach.user.full_name }}</p>
+                        <p class="appointment-detail"><span class="detail-label">Plan:</span> {{ appointment.plan }}</p>
+                        <p class="appointment-detail"><span class="detail-label">Date:</span> {{ appointment.created|date:"F j, Y" }}</p>
+                        <p class="appointment-status">
+                            <span class="detail-label">Status:</span>
+                            {% if appointment.workoutplan %}
+                                <a href="{% url 'coaches:appointment_answer' appointment.id %}" class="status-link answered">answered</a>
+                            {% else %}
+                                <span class="status-text pending">pending</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="{% url 'coaches:user_appointments_delete' appointment.id %}" class="action-btn delete-btn">Delete</a>
+                        <a href="{% url 'coaches:user_appointments_edit' appointment.id %}" class="action-btn edit-btn">Edit</a>
+                    </div>
                 </div>
-                
             {% endfor %}
         </div>
     {% else %}
