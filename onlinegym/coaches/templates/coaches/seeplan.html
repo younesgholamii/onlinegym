@@ -1,13 +1,52 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}My Appointments - OnlineGym{% endblock %}
+{% block title %}My Workout Plan - OnlineGym{% endblock %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'coaches/seeplan.css' %}">
 {% endblock %}
 
 {% block content %}
-    {% for answer in answeres %}
-        <h1>{{ answer.exercise }}</h1>
-    {% endfor %}
+<div class="plan-container">
+    <div class="plan-header">
+        <h1>Your Personalized Workout Plan</h1>
+        <p>Designed specifically for your fitness goals</p>
+    </div>
+
+    {% if answeres %}
+        {% for answer in answeres %}
+            <div class="exercise-card">
+                <h2 class="exercise-title">{{ answer.exercise }}</h2>
+                
+                <div class="exercise-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Sets</span>
+                        {{ answer.sets }}
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Reps</span>
+                        {{ answer.reps }}
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Rest Time</span>
+                        {{ answer.rest_time }} seconds
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Notes</span>
+                        {{ answer.notes|default:"No additional notes" }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-plans-message">
+            <p>No workout plan has been created for you yet.</p>
+            <p>Please check back later or contact your coach.</p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

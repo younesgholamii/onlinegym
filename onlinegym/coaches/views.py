@@ -52,6 +52,14 @@ class UserAppointmentsView(LoginRequiredMixin, View):
         return render(request, 'coaches/appointments.html', {'appointments': appointments})
 
 
+class UserAppointmentsDeleteView(LoginRequiredMixin, View):
+    def get(self, request, appointment_id):
+        get_object_or_404(Appointment, id=appointment_id).delete()
+        messages.success(request, "appointment deleted successfully", 'success')
+        return redirect('coaches:user_appointments')
+
+
+
 class CoachesRequestView(LoginRequiredMixin, View):
     def get(self, request, coach_id):
         user = get_object_or_404(User, id=coach_id)

@@ -1,0 +1,84 @@
+/* seeplan.css */
+.plan-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.plan-header {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #3498db;
+}
+
+.exercise-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #3498db;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.exercise-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-title {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.exercise-title:before {
+    content: "🏋️";
+    margin-right: 10px;
+}
+
+.exercise-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.detail-item {
+    background-color: #e9ecef;
+    padding: 0.8rem;
+    border-radius: 5px;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.no-plans-message {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 1.2rem;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .plan-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .exercise-details {
+        grid-template-columns: 1fr;
+    }
+}
