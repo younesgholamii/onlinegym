@@ -5,6 +5,7 @@ from accounts.models import User
 from .models import Coach, CoachPosts, Appointment, Exercises, AppointmentAnswer, WorkoutPlan
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import AppointmentForm
 
 
 class CoachRegisterView(View):
@@ -57,6 +58,23 @@ class UserAppointmentsDeleteView(LoginRequiredMixin, View):
         get_object_or_404(Appointment, id=appointment_id).delete()
         messages.success(request, "appointment deleted successfully", 'success')
         return redirect('coaches:user_appointments')
+    
+
+class UserAppointmentsEditView(LoginRequiredMixin, View):
+    form_class = AppointmentForm
+    def get(self, request, appointment_id):
+        appointment =  get_object_or_404(Appointment, id=appointment_id, user=request.user.regular_profile)
+        form = self.form_class(instance=appointment)
+        return render(request, 'coaches/appointmentedit.html', {'form': form})
+    
+    def post(self, request, appointment_id):
+        appointment = get_object_or_404(Appointment, id=appointment_id, user=request.user.regular_profile)
+        form = self.form_class(request.POST, instance=appointment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'appointment edited successfully', 'success')
+            return redirect('coaches:user_appointments')
+        return render(request, 'coaches/appointmentedit.html', {'form': form})
 
 
 
