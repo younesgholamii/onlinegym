@@ -37,18 +37,18 @@ class Appointment(models.Model):
         ('Diet', 'Diet plan'),
         ('Exercise', 'Exercise plan')
     ]
-
     user = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
     coach = models.ForeignKey(Coach, on_delete=models.CASCADE)
     workoutplan = models.OneToOneField("WorkoutPlan", on_delete=models.CASCADE, related_name='workout_plan', null=True, blank=True)
-    answered = models.BooleanField(default=False)
+    status = models.CharField(max_length=50, choices=[('pending', 'pending'), ('answered', 'answered')], default='pending')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=11)
     age = models.SmallIntegerField()
     weight = models.SmallIntegerField()
     height = models.SmallIntegerField()
-    plan = models.CharField(max_length=50, choices=plan_choices, default='D')
+    image = models.ImageField(upload_to='appointments/', null=True, blank=True, verbose_name="appointment Image")
+    plan = models.CharField(max_length=50, choices=plan_choices, default='Diet')
     descriptions = models.TextField(default=None, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

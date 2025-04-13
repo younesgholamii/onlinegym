@@ -11,10 +11,11 @@ from coaches.models import Appointment, User, Coach, RegularUser
 
 class UserRegisterView(View):
     form_class = UserRegisterationForm
+    template_name = 'accounts/register.html'
 
     def get(self, request):
         form = self.form_class()
-        return render(request, 'accounts/register.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
     
     def post(self, request):
         form = self.form_class(request.POST)
@@ -26,11 +27,12 @@ class UserRegisterView(View):
             RegularUser.objects.create(user=user)
             messages.success(request, 'registered successfully', 'success')
             return redirect('home:home')
-        return render(request, 'accounts/register.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
 
 class UserLoginView(View):
     form_class = UserLoginForm
+    template_name = 'accounts/login.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -40,7 +42,7 @@ class UserLoginView(View):
 
     def get(self, request):
         form = self.form_class()
-        return render(request, 'accounts/login.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -54,7 +56,7 @@ class UserLoginView(View):
                 return redirect('home:home')
             else:
                 messages.error(request, 'Invalid email or password', 'danger')
-        return render(request, 'accounts/login.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
 
 class UserLogoutView(LoginRequiredMixin, View):
@@ -65,40 +67,36 @@ class UserLogoutView(LoginRequiredMixin, View):
 
 
 class UserProfileView(LoginRequiredMixin, View):
+    form_class = AppointmentForm
+    template_name = 'accounts/profile.html'
+
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)            
-        form = AppointmentForm()
-        return render(request, 'accounts/profile.html', {'user': user, 'form': form})
+        form = self.form_class()
+        return render(request, self.template_name, {'user': user, 'form': form})
     
     def post(self, request, user_id):
-        form = AppointmentForm(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            cd = form.cleaned_data
-            user = get_object_or_404(User, id=user_id)
-            coach = get_object_or_404(Coach, user=user)
-            appointment = Appointment.objects.create(
-                user = get_object_or_404(RegularUser, user=request.user),
-                coach = coach,
-                first_name = cd['first_name'],
-                last_name = cd['last_name'],
-                phone_number = cd['phone_number'],
-                age = cd['age'],
-                weight = cd['weight'],
-                height = cd['height'],
-                plan = cd['plan'],
-                descriptions = cd.get('descriptions', ''),
-            )
+            appointment = form.save(commit=False)
+            user = get_object_or_404(RegularUser, user=request.user)
+            coach_user = get_object_or_404(User, id=user_id)
+            coach = get_object_or_404(Coach, user=coach_user)
+            appointment.user = user
+            appointment.coach = coach
             appointment.save()
             messages.success(request, 'Appointment sent successfully', 'success')
             return redirect('accounts:user_profile', user_id=user_id)
+        return render(request, 'accounts/profile.html', {'form': form})
         
 
 class UserProfileEditView(LoginRequiredMixin, View):
     form_class = UserProfileEditForm
+    template_name = 'accounts/editprofile.html'
 
     def get(self, request):
         form = self.form_class(instance=request.user)
-        return render(request, 'accounts/editprofile.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
     
     def post(self, request):
         form = self.form_class(request.POST, request.FILES, instance=request.user)
@@ -106,4 +104,4 @@ class UserProfileEditView(LoginRequiredMixin, View):
             form.save()
             messages.success(request, 'Profile editted successfully', 'success')
             return redirect('accounts:user_profile', user_id=request.user.id)
-        return render(request, 'accounts/editprofile.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
