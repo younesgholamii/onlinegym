@@ -63,7 +63,14 @@ class ExercisesForm(forms.ModelForm):
 class AppointmentAnswerForm(forms.Form):
     name = forms.CharField(max_length=255)
     exercises = forms.ModelMultipleChoiceField(
-        queryset=Exercises.objects.all(),
+        queryset=Exercises.objects.none(),
         widget=forms.CheckboxSelectMultiple,
         label='Select exercises'
     )
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['exercises'].queryset = Exercises.objects.filter(coach__user=user)
+            

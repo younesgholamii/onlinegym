@@ -63,6 +63,9 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.user.user.username} -- {self.coach.user.username}"
     
+    class Meta:
+        ordering = ['-created']
+    
 
 class Exercises(models.Model):
     coach = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='coachs')
