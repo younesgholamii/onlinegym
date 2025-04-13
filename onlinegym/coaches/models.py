@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User, RegularUser
 from django.urls import reverse
+from django.core.validators import FileExtensionValidator
 
 
 
@@ -47,7 +48,13 @@ class Appointment(models.Model):
     age = models.SmallIntegerField()
     weight = models.SmallIntegerField()
     height = models.SmallIntegerField()
-    image = models.ImageField(upload_to='appointments/', null=True, blank=True, verbose_name="appointment Image")
+    image = models.ImageField(
+        upload_to='appointments/',
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
+        null=True,
+        blank=True,
+        verbose_name="appointment Image"
+        )
     plan = models.CharField(max_length=50, choices=plan_choices, default='Diet')
     descriptions = models.TextField(default=None, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)

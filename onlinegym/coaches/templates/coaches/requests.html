@@ -17,11 +17,7 @@
                     <p><strong>User:</strong> {{ appointment.user.user.full_name }}</p>
                     <p><strong>Plan:</strong> {{ appointment.plan }}</p>
                     <p><strong>Date:</strong> {{ appointment.created|date:"F j, Y" }}</p>
-                    {% if appointment.answered %}
-                        <a href="{% url 'coaches:coach_answer' appointment.id %}" class="btn-answer">Answered</a>
-                    {% else %}
-                        <a href="{% url 'coaches:coach_answer' appointment.id %}" class="btn-answer">Answer</a>
-                    {% endif %}
+                    <a href="{% url 'coaches:coach_answer' appointment.id %}" class="btn-answer">{{appointment.status}}</a>
                     
                 </div>
             {% endfor %}

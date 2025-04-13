@@ -106,14 +106,17 @@ class CoachesExercisesView(LoginRequiredMixin, View):
 
 
 class CoachesAnswerView(LoginRequiredMixin, View):
+    form_class = AppointmentAnswerForm
+    template_name = 'coaches/answer.html'
+
     def get(self, request, appointment_id):
-        form = AppointmentAnswerForm()
+        form = self.form_class()
         exercises = Exercises.objects.filter(coach__user__id=request.user.id)
         appointment = get_object_or_404(Appointment, id=appointment_id)
-        return render(request, 'coaches/answer.html', {'appointment': appointment, 'exercises': exercises, 'form': form})
+        return render(request, self.template_name, {'appointment': appointment, 'exercises': exercises, 'form': form})
 
     def post(self, request, appointment_id):
-        form = AppointmentAnswerForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
             appointment = get_object_or_404(Appointment, id=appointment_id)
             workout_plan, create = WorkoutPlan.objects.get_or_create(user=appointment.user)
@@ -133,7 +136,7 @@ class CoachesAnswerView(LoginRequiredMixin, View):
             appointment.answered = True
             appointment.save()
             return redirect('coaches:coach_requests', request.user.id)
-        return render(request, 'coaches/answer.html', {
+        return render(request, self.template_name, {
         'appointment': appointment,
         'form': form,
         })

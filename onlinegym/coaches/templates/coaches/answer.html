@@ -16,6 +16,11 @@
         <p><strong>Height:</strong> {{ appointment.height }} cm</p>
         <p><strong>Weight:</strong> {{ appointment.weight }} kg</p>
         <p><strong>Description:</strong> {{ appointment.descriptions }}</p>
+        {% if appointment.image %}
+            <img src="{{ appointment.image.url }}" alt="user Image" style="max-width: 50px;">
+        {% else %}
+            <p>No image available</p>
+        {% endif %}
     </div>
     <form method="post" id="exercise-form">
         {% csrf_token %}

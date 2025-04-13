@@ -23,7 +23,7 @@
                     {% if post.image %}
                         <img src="{{ post.image.url }}" class="card-img" alt="Post Image" style="max-width: 180px;">
                     {% else %}
-                        <img src="https://via.placeholder.com/300x200" class="card-img" alt="Default Post Image">
+                        <img src="../../../media/default_profile.jpg" class="card-img" alt="Default Post Image">
                     {% endif %}
                     <div class="card-body" style="text-align: center;">
                         <a href="{{ post.get_absolute_url }}" style="text-decoration: none;"><h5 class="card-title">{{ post.coach.user.full_name }}</h5></a>
