@@ -6,6 +6,8 @@ from django.core.validators import FileExtensionValidator
 
 
 class Coach(models.Model):
+    """ manage coachs information """
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='coach_profile')
     specialty = models.CharField(max_length=100)
     certifications = models.TextField(blank=True, null=True)
@@ -15,6 +17,8 @@ class Coach(models.Model):
 
 
 class CoachPosts(models.Model):
+    """ manage posts """
+
     coach = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=255, verbose_name="Title")
     content = models.TextField(verbose_name="Content")
@@ -34,6 +38,8 @@ class CoachPosts(models.Model):
         return reverse('accounts:user_profile', args=[int(self.coach.user.id)])
     
 class Appointment(models.Model):
+    """ manage all appointments that users reserve from coaches """
+
     plan_choices = [
         ('Diet', 'Diet plan'),
         ('Exercise', 'Exercise plan')
@@ -68,6 +74,8 @@ class Appointment(models.Model):
     
 
 class Exercises(models.Model):
+    """ manage coaches saved exercises """
+
     coach = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='coachs')
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=100, null=True, blank=True)
@@ -81,10 +89,15 @@ class Exercises(models.Model):
 
 
 class WorkoutPlan(models.Model):
+    """ a plan for each appointment """
+
     user = models.ForeignKey(RegularUser, on_delete=models.CASCADE, related_name='user_workout_plan')
     name = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'name')
 
     def __str__(self):
         return self.name
@@ -92,6 +105,8 @@ class WorkoutPlan(models.Model):
 
 
 class AppointmentAnswer(models.Model):
+    """ many exercises for a plan """
+
     workout_plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE, related_name='plan')
     exercise = models.ForeignKey(Exercises, on_delete=models.CASCADE, related_name='exercise')
     created = models.DateTimeField(auto_now_add=True)

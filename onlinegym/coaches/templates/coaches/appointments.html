@@ -29,7 +29,9 @@
                     </div>
                     <div class="card-actions">
                         <a href="{% url 'coaches:user_appointments_delete' appointment.id %}" class="action-btn delete-btn">Delete</a>
-                        <a href="{% url 'coaches:user_appointments_edit' appointment.id %}" class="action-btn edit-btn">Edit</a>
+                        {% if appointment.status == 'pending' %}
+                            <a href="{% url 'coaches:user_appointments_edit' appointment.id %}" class="action-btn edit-btn">Edit</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

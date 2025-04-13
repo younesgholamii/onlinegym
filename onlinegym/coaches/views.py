@@ -9,6 +9,8 @@ from .forms import AppointmentForm
 
 
 class CoachRegisterView(View):
+    """ coach register view """
+
     form_class = CoachRegisterForm
 
     def get(self, request):
@@ -29,6 +31,8 @@ class CoachRegisterView(View):
 
 
 class CoachPostsView(LoginRequiredMixin, View):
+    """ save posts in database """
+
     form_class = CoachPostsForm
 
     def get(self, request):
@@ -48,12 +52,16 @@ class CoachPostsView(LoginRequiredMixin, View):
 
 
 class UserAppointmentsView(LoginRequiredMixin, View):
+    """ show all appointments that user reserved """
+
     def get(self, request):
         appointments = Appointment.objects.filter(user__user__id=request.user.id).order_by('-created')
         return render(request, 'coaches/appointments.html', {'appointments': appointments})
 
 
 class UserAppointmentsDeleteView(LoginRequiredMixin, View):
+    """ deleting the appointments """
+
     def get(self, request, appointment_id):
         get_object_or_404(Appointment, id=appointment_id).delete()
         messages.success(request, "appointment deleted successfully", 'success')
@@ -61,6 +69,8 @@ class UserAppointmentsDeleteView(LoginRequiredMixin, View):
     
 
 class UserAppointmentsEditView(LoginRequiredMixin, View):
+    """ editing the appointments """
+
     form_class = AppointmentForm
     def get(self, request, appointment_id):
         appointment =  get_object_or_404(Appointment, id=appointment_id, user=request.user.regular_profile)
@@ -79,6 +89,8 @@ class UserAppointmentsEditView(LoginRequiredMixin, View):
 
 
 class CoachesRequestView(LoginRequiredMixin, View):
+    """ show all requests for coaches """
+
     def get(self, request, coach_id):
         user = get_object_or_404(User, id=coach_id)
         appointments = Appointment.objects.filter(coach__user__id=user.id)
@@ -86,6 +98,8 @@ class CoachesRequestView(LoginRequiredMixin, View):
         
 
 class CoachesExercisesView(LoginRequiredMixin, View):
+    """ show and save all exercises """
+
     def get(self, request, coach_id):
         user = get_object_or_404(User, id=coach_id)
         exercises = Exercises.objects.filter(coach__user__id=user.id)
@@ -106,6 +120,8 @@ class CoachesExercisesView(LoginRequiredMixin, View):
 
 
 class CoachesAnswerView(LoginRequiredMixin, View):
+    """ save and send the answer of appointments to the users """
+
     form_class = AppointmentAnswerForm
     template_name = 'coaches/answer.html'
 
@@ -113,35 +129,45 @@ class CoachesAnswerView(LoginRequiredMixin, View):
         form = self.form_class(user=request.user)
         exercises = Exercises.objects.filter(coach__user=request.user)
         appointment = get_object_or_404(Appointment, id=appointment_id)
-        return render(request, self.template_name, {'appointment': appointment, 'exercises': exercises, 'form': form})
+        return render(request, self.template_name, {
+            'appointment': appointment,
+            'exercises': exercises,
+            'form': form
+        })
 
     def post(self, request, appointment_id):
         form = self.form_class(request.POST, user=request.user)
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        
         if form.is_valid():
-            appointment = get_object_or_404(Appointment, id=appointment_id)
-            workout_plan, create = WorkoutPlan.objects.get_or_create(user=appointment.user)
-            workout_plan = appointment.workoutplan if appointment.workoutplan else WorkoutPlan.objects.create(user=appointment.user)
             cd = form.cleaned_data
-            workout_plan.name = cd['name']
-            workout_plan.save()
-            AppointmentAnswer.objects.filter(workout_plan=workout_plan).delete()
+            workout_plan, created = WorkoutPlan.objects.get_or_create(
+                user=appointment.user,
+                defaults={'name': cd['name']}
+            )
+            if not created:
+                workout_plan.name = cd['name']
+                workout_plan.save()
+            
             for exercise in cd['exercises']:
                 AppointmentAnswer.objects.create(
                     workout_plan=workout_plan,
                     exercise=exercise
                 )
-        if not appointment.workoutplan:
             appointment.workoutplan = workout_plan
-            appointment.answered = True
+            appointment.status = 'answered'
             appointment.save()
             return redirect('coaches:coach_requests', request.user.id)
         return render(request, self.template_name, {
             'appointment': appointment,
             'form': form,
+            'exercises': Exercises.objects.filter(coach__user=request.user)
         })
 
 
 class AppointmentAnswerView(LoginRequiredMixin, View):
+    """ show the answer of requests to users """
+
     def get(self, request, appointment_id):
         appointment_answere = get_object_or_404(Appointment, id=appointment_id)
         appointment_answeres = AppointmentAnswer.objects.filter(workout_plan=appointment_answere.workoutplan)

@@ -10,6 +10,8 @@ from coaches.models import Appointment, User, Coach, RegularUser
 
 
 class UserRegisterView(View):
+    """ user register view """
+    
     form_class = UserRegisterationForm
     template_name = 'accounts/register.html'
 
@@ -31,6 +33,8 @@ class UserRegisterView(View):
 
 
 class UserLoginView(View):
+    """ user login view """
+
     form_class = UserLoginForm
     template_name = 'accounts/login.html'
 
@@ -60,6 +64,8 @@ class UserLoginView(View):
 
 
 class UserLogoutView(LoginRequiredMixin, View):
+    """ user logout view """
+
     def get(self, request):
         logout(request)
         messages.success(request, 'Logged out successfully!', 'success')
@@ -67,6 +73,8 @@ class UserLogoutView(LoginRequiredMixin, View):
 
 
 class UserProfileView(LoginRequiredMixin, View):
+    """ show user profile and send plan request for coach """
+
     form_class = AppointmentForm
     template_name = 'accounts/profile.html'
 
@@ -91,6 +99,8 @@ class UserProfileView(LoginRequiredMixin, View):
         
 
 class UserProfileEditView(LoginRequiredMixin, View):
+    """ for editing the user information """
+
     form_class = UserProfileEditForm
     template_name = 'accounts/editprofile.html'
 

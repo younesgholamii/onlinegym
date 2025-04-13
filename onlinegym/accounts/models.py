@@ -6,6 +6,8 @@ from .managers import UserManager
 from datetime import date
 
 class User(AbstractBaseUser):
+    """ manage all users """
+
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=50, unique=True, null=True)
     full_name = models.CharField(max_length=50)
@@ -50,6 +52,8 @@ class User(AbstractBaseUser):
 
 
 class RegularUser(models.Model):
+    """ manage regular users """
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='regular_profile')
     height = models.FloatField(blank=True, null=True)
     weight = models.FloatField(blank=True, null=True)
