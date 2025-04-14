@@ -99,15 +99,16 @@ class CoachesRequestView(LoginRequiredMixin, View):
 
 class CoachesExercisesView(LoginRequiredMixin, View):
     """ show and save all exercises """
+    form_class = ExercisesForm
 
     def get(self, request, coach_id):
         user = get_object_or_404(User, id=coach_id)
         exercises = Exercises.objects.filter(coach__user__id=user.id)
-        form = ExercisesForm()
+        form = self.form_class()
         return render(request, 'coaches/exercises.html', {'exercises': exercises, 'form': form})
     
     def post(self, request, coach_id):
-        form = ExercisesForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
             user = get_object_or_404(User, id=coach_id)
             coach = get_object_or_404(Coach, user__id=user.id)
@@ -117,6 +118,13 @@ class CoachesExercisesView(LoginRequiredMixin, View):
             messages.success(request, 'exercise added successfully', 'success')
             return redirect('coaches:coach_exercises', user.id)
         return render(request, 'coaches/exercises.html', {'form': form})
+
+
+class CoachesExercisesDeleteView(LoginRequiredMixin, View):
+    def get(self, request, exercise_id, coach_id):
+        get_object_or_404(Exercises, id=exercise_id).delete()
+        messages.success(request, "exercise deleted successfully", "success")
+        return redirect("coaches:coach_exercises", coach_id=coach_id)
 
 
 class CoachesAnswerView(LoginRequiredMixin, View):

@@ -23,7 +23,10 @@
                     <p><strong>Category:</strong> {{ exercise.category }}</p>
                     <p><strong>Sets:</strong> {{ exercise.sets }}</p>
                     <p><strong>Reps:</strong> {{ exercise.reps }}</p>
+                    <a href="{% url 'coaches:coach_exercises_delete' exercise.id exercise.coach.user.id %}">Delete</a>
+                    <a href="">Edit</a>
                 </div>
+                
             {% endfor %}
         </div>
     {% else %}
