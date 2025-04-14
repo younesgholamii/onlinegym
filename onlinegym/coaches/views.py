@@ -127,6 +127,24 @@ class CoachesExercisesDeleteView(LoginRequiredMixin, View):
         return redirect("coaches:coach_exercises", coach_id=coach_id)
 
 
+class CoachesExercisesEditView(LoginRequiredMixin, View):
+    form_class = ExercisesForm
+
+    def get(self, request, exercise_id, coach_id):
+        exercise = get_object_or_404(Exercises, id=exercise_id)
+        form = self.form_class(instance=exercise)
+        return render(request, 'coaches/exercisesedit.html', {'form': form})
+    
+    def post(self, request, exercise_id, coach_id):
+        exercise = get_object_or_404(Exercises, id=exercise_id)
+        form = self.form_class(request.POST, instance=exercise)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'exercise edited successfully', 'success')
+            return redirect('coaches:coach_exercises', coach_id=coach_id)
+        return render(request, 'coaches/exercises.html', {'form': form})
+
+
 class CoachesAnswerView(LoginRequiredMixin, View):
     """ save and send the answer of appointments to the users """
 

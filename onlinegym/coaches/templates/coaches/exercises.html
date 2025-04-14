@@ -24,7 +24,7 @@
                     <p><strong>Sets:</strong> {{ exercise.sets }}</p>
                     <p><strong>Reps:</strong> {{ exercise.reps }}</p>
                     <a href="{% url 'coaches:coach_exercises_delete' exercise.id exercise.coach.user.id %}">Delete</a>
-                    <a href="">Edit</a>
+                    <a href="{% url 'coaches:coach_exercises_edit' exercise.id exercise.coach.user.id %}">Edit</a>
                 </div>
                 
             {% endfor %}

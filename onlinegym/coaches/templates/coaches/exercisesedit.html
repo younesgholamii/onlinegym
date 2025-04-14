@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Exercises - OnlineGym{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<form method="post" class="exercise-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-add-exercise">Edit Exercise</button>
+    </form>
+{% endblock %}
